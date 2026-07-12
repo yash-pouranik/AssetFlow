@@ -25,6 +25,12 @@ export async function allocateAsset(
     throw new NotFoundError(`Asset with id '${data.assetId}' not found`);
   }
 
+  if (asset.status === 'UNDER_MAINTENANCE') {
+    throw new ConflictError(
+      `Asset '${asset.name}' (${asset.tag}) is currently under maintenance and cannot be allocated.`,
+    );
+  }
+
   // 2. Conflict check — block if there is already an ACTIVE allocation
   const existing = await allocationRepo.findActiveAllocationForAsset(data.assetId);
   if (existing) {

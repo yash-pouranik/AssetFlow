@@ -49,6 +49,12 @@ export const bookingService = {
       );
     }
 
+    if (asset.status === 'UNDER_MAINTENANCE') {
+      throw new ConflictError(
+        `Asset "${asset.name}" (${asset.tag}) is currently under maintenance and cannot be booked`,
+      );
+    }
+
     // 2. Overlap check
     const overlapping = await bookingRepository.findOverlapping(
       data.assetId,
