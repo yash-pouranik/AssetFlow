@@ -104,6 +104,7 @@ export default function AuditDetailPage() {
   const [notes, setNotes] = useState("");
 
   const isSystemAdmin = user?.role === "ADMIN";
+  const canManageAudits = user?.role === "ADMIN" || user?.role === "ASSET_MANAGER";
 
   // Fetch Audit details
   const { data: auditData, isLoading, error } = useQuery<{ success: boolean; data: AuditDetail }>({
@@ -371,9 +372,13 @@ export default function AuditDetailPage() {
                             setNotes(item.notes || "");
                           }
                         }}>
-                          <DialogTrigger render={<Button variant="ghost" size="sm" className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950/20" />}>
-                            Verify Asset
-                          </DialogTrigger>
+                          {canManageAudits && (
+                            <DialogTrigger asChild>
+                              <Button variant="ghost" size="sm" className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950/20">
+                                Verify Asset
+                              </Button>
+                            </DialogTrigger>
+                          )}
                           <DialogContent className="sm:max-w-[425px]">
                             <form onSubmit={handleAuditSubmit} className="space-y-4">
                               <DialogHeader>

@@ -50,7 +50,7 @@ export const maintenanceService = {
       raisedBy: { connect: { id: raisedById } },
       issue: data.issue,
       priority: data.priority,
-      photoUrl: photo ?? null,
+      photo: photo ?? null,
       status: MaintenanceStatus.PENDING,
     });
 
@@ -96,8 +96,6 @@ export const maintenanceService = {
       const updated = await maintenanceRepository.update(id, {
         status: newStatus,
         approvedBy: { connect: { id: approverId } },
-        approvedAt: new Date(),
-        notes: data.notes,
         ...(data.technicianId
           ? { technician: { connect: { id: data.technicianId } } }
           : {}),
@@ -117,8 +115,6 @@ export const maintenanceService = {
       const updated = await maintenanceRepository.update(id, {
         status: MaintenanceStatus.REJECTED,
         approvedBy: { connect: { id: approverId } },
-        approvedAt: new Date(),
-        notes: data.notes,
       });
 
       eventBus.emit(EVENTS.MAINTENANCE_REJECTED, { request: updated });
@@ -188,7 +184,6 @@ export const maintenanceService = {
 
     return maintenanceRepository.update(id, {
       status: MaintenanceStatus.IN_PROGRESS,
-      startedAt: new Date(),
     });
   },
 

@@ -35,9 +35,12 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { useAuthStore } from '@/store/auth';
 
 export default function OrganizationPage() {
   const queryClient = useQueryClient();
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === 'ADMIN';
 
   // Queries with safe response unwrapping
   const { data: departments = [], isLoading: isLoadingDepartments } = useQuery({
@@ -259,17 +262,19 @@ export default function OrganizationPage() {
                   Manage organization departments, hierarchy, and heads.
                 </CardDescription>
               </div>
-              <Button
-                onClick={() => {
-                  setEditingDept(null);
-                  setDeptForm({ name: '', status: 'ACTIVE', parentId: '', headId: '' });
-                  setIsDeptDialogOpen(true);
-                }}
-                size="sm"
-                className="flex items-center gap-1"
-              >
-                <Plus className="w-4 h-4" /> Add Department
-              </Button>
+              {isAdmin && (
+                <Button
+                  onClick={() => {
+                    setEditingDept(null);
+                    setDeptForm({ name: '', status: 'ACTIVE', parentId: '', headId: '' });
+                    setIsDeptDialogOpen(true);
+                  }}
+                  size="sm"
+                  className="flex items-center gap-1"
+                >
+                  <Plus className="w-4 h-4" /> Add Department
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">
@@ -310,24 +315,26 @@ export default function OrganizationPage() {
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                setEditingDept(dept);
-                                setDeptForm({
-                                  name: dept.name || '',
-                                  status: dept.status || 'ACTIVE',
-                                  parentId: dept.parentId || '',
-                                  headId: dept.headId || '',
-                                });
-                                setIsDeptDialogOpen(true);
-                              }}
-                              className="h-8 w-8 p-0"
-                            >
-                              <Edit className="h-4 w-4" />
-                              <span className="sr-only">Edit</span>
-                            </Button>
+                            {isAdmin && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingDept(dept);
+                                  setDeptForm({
+                                    name: dept.name || '',
+                                    status: dept.status || 'ACTIVE',
+                                    parentId: dept.parentId || '',
+                                    headId: dept.headId || '',
+                                  });
+                                  setIsDeptDialogOpen(true);
+                                }}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Edit className="h-4 w-4" />
+                                <span className="sr-only">Edit</span>
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))
@@ -348,17 +355,19 @@ export default function OrganizationPage() {
                   Asset classification categories.
                 </CardDescription>
               </div>
-              <Button
-                onClick={() => {
-                  setCatForm({ name: '', description: '' });
-                  setExtraFields([{ key: '', value: '' }]);
-                  setIsCatDialogOpen(true);
-                }}
-                size="sm"
-                className="flex items-center gap-1"
-              >
-                <Plus className="w-4 h-4" /> Add Category
-              </Button>
+              {isAdmin && (
+                <Button
+                  onClick={() => {
+                    setCatForm({ name: '', description: '' });
+                    setExtraFields([{ key: '', value: '' }]);
+                    setIsCatDialogOpen(true);
+                  }}
+                  size="sm"
+                  className="flex items-center gap-1"
+                >
+                  <Plus className="w-4 h-4" /> Add Category
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">

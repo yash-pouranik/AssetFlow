@@ -39,11 +39,9 @@ export async function allocateAsset(
   // 3. Create the allocation
   const allocation = await allocationRepo.createAllocation({
     asset: { connect: { id: data.assetId } },
-    allocatedBy: { connect: { id: allocatedById } },
     ...(data.userId && { user: { connect: { id: data.userId } } }),
     ...(data.departmentId && { department: { connect: { id: data.departmentId } } }),
     expectedReturn: data.expectedReturn ?? null,
-    notes: data.notes ?? null,
     status: 'ACTIVE',
     allocatedAt: new Date(),
   });
@@ -100,9 +98,7 @@ export async function returnAsset(
   const updated = await allocationRepo.updateAllocation(allocationId, {
     status: 'RETURNED',
     returnedAt: new Date(),
-    returnedBy: { connect: { id: returnedById } },
     conditionNote: data.conditionNote ?? null,
-    condition: data.condition ?? null,
   });
 
   // 5. Update asset status
@@ -224,7 +220,6 @@ export async function approveTransfer(
     await allocationRepo.updateAllocation(transfer.allocationId, {
       status: 'RETURNED',
       returnedAt: new Date(),
-      returnedBy: { connect: { id: approvedById } },
       conditionNote: 'Closed by approved transfer',
     });
 
@@ -232,7 +227,6 @@ export async function approveTransfer(
     const oldAllocation = transfer.allocation;
     const newAllocation = await allocationRepo.createAllocation({
       asset: { connect: { id: oldAllocation.assetId } },
-      allocatedBy: { connect: { id: approvedById } },
       ...(transfer.targetUserId && {
         user: { connect: { id: transfer.targetUserId } },
       }),
@@ -241,7 +235,6 @@ export async function approveTransfer(
       }),
       status: 'ACTIVE',
       allocatedAt: new Date(),
-      notes: `Transferred from allocation '${transfer.allocationId}'`,
     });
 
     // c) Mark transfer COMPLETED

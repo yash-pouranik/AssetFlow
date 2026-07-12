@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus, Search } from "lucide-react";
 import api from "@/lib/api";
+import { useAuthStore } from "@/store/auth";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,6 +41,8 @@ type Meta = {
 };
 
 export default function AssetsPage() {
+  const { user } = useAuthStore();
+  const canManageAssets = user?.role === 'ADMIN' || user?.role === 'ASSET_MANAGER';
   const [assets, setAssets] = useState<Asset[]>([]);
   const [meta, setMeta] = useState<Meta | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -101,12 +104,14 @@ export default function AssetsPage() {
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Assets</h2>
         <div className="flex items-center space-x-2">
-          <Link href="/assets/register">
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Register Asset
-            </Button>
-          </Link>
+          {canManageAssets && (
+            <Link href="/assets/register">
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Register Asset
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
       

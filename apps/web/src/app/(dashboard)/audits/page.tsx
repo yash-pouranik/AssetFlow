@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import api from '@/lib/api';
+import { useAuthStore } from '@/store/auth';
 import {
   Table,
   TableBody,
@@ -56,6 +57,8 @@ interface Audit {
 }
 
 export default function AuditsPage() {
+  const { user } = useAuthStore();
+  const canManageAudits = user?.role === 'ADMIN' || user?.role === 'ASSET_MANAGER';
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [title, setTitle] = useState('');
@@ -145,11 +148,14 @@ export default function AuditsPage() {
           </p>
         </div>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger render={<Button className="shadow-sm bg-indigo-600 hover:bg-indigo-700 text-white" />}>
-            <Plus className="mr-2 h-4 w-4" />
-            New Audit Cycle
-          </DialogTrigger>
+        {canManageAudits && (
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="shadow-sm bg-indigo-600 hover:bg-indigo-700 text-white">
+                <Plus className="mr-2 h-4 w-4" />
+                New Audit Cycle
+              </Button>
+            </DialogTrigger>
           <DialogContent className="sm:max-w-[450px]">
             <form onSubmit={handleCreateAudit}>
               <DialogHeader>
@@ -227,6 +233,7 @@ export default function AuditsPage() {
             </form>
           </DialogContent>
         </Dialog>
+        )}
       </div>
 
       <Card className="border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">

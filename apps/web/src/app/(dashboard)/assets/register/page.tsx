@@ -26,9 +26,7 @@ const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   categoryId: z.string().min(1, "Please select a category"),
   serialNumber: z.string().optional(),
-  condition: z.enum(["EXCELLENT", "GOOD", "FAIR", "POOR", "DAMAGED"], {
-    required_error: "Please select a condition",
-  }),
+  condition: z.enum(["EXCELLENT", "GOOD", "FAIR", "POOR", "DAMAGED"]),
   location: z.string().optional(),
   isBookable: z.boolean().default(false),
   photoUrl: z.string().optional(),
@@ -54,7 +52,7 @@ export default function RegisterAssetPage() {
     watch,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as any,
+    resolver: zodResolver(formSchema as any) as any,
     defaultValues: {
       name: "",
       categoryId: "",
@@ -155,7 +153,7 @@ export default function RegisterAssetPage() {
                 <Label htmlFor="categoryId" className="text-sm font-medium">Category <span className="text-destructive">*</span></Label>
                 <Select
                   value={categoryIdValue}
-                  onValueChange={(value) => setValue("categoryId", value, { shouldValidate: true })}
+                  onValueChange={(value) => setValue("categoryId", value as any, { shouldValidate: true })}
                 >
                   <SelectTrigger className={errors.categoryId ? "border-destructive focus:ring-destructive" : ""}>
                     <SelectValue placeholder="Select a category" />

@@ -366,7 +366,7 @@ export default function AssetDetailPage() {
                             {maintenance.issue}
                           </TableCell>
                           <TableCell>
-                            {getMainMaintenancePriorityBadge(maintenance.priority)}
+                            {getMaintenancePriorityBadge(maintenance.priority)}
                           </TableCell>
                           <TableCell>
                             {getMaintenanceStatusBadge(maintenance.status)}
