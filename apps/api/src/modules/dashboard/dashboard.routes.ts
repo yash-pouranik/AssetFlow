@@ -29,6 +29,9 @@ router.get('/kpis', authenticate, async (req, res, next) => {
       pendingTransfers,
       pendingMaintenance,
       upcomingReturns,
+      totalAssets,
+      activeAllocations,
+      activeAudits,
     ] = await Promise.all([
       prisma.asset.count({ where: { status: 'AVAILABLE', ...deptFilter } }),
       prisma.asset.count({ where: { status: 'ALLOCATED', ...deptFilter } }),
@@ -59,6 +62,9 @@ router.get('/kpis', authenticate, async (req, res, next) => {
           ...deptFilter,
         },
       }),
+      prisma.asset.count({ where: { ...deptFilter } }), // totalAssets
+      prisma.allocation.count({ where: { status: 'ACTIVE', ...deptFilter } }), // activeAllocations
+      prisma.auditCycle.count({ where: { status: 'OPEN', ...deptFilter } }), // activeAudits
     ]);
 
     // Overdue allocations detail
@@ -96,6 +102,10 @@ router.get('/kpis', authenticate, async (req, res, next) => {
           pendingMaintenance,
           upcomingReturns,
         },
+        totalAssets,
+        activeAllocations,
+        pendingMaintenance,
+        activeAudits,
         overdueDetails,
         recentActivity,
       },
