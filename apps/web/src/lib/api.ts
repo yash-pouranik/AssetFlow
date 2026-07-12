@@ -63,8 +63,15 @@ api.interceptors.response.use(
         const refreshToken = useAuthStore.getState().refreshToken;
         if (!refreshToken) throw new Error('No refresh token available in store');
         
-        // Call refresh endpoint using a fresh axios instance
-        const { data } = await axios.post(`${api.defaults.baseURL}/auth/refresh`, { refreshToken });
+        // Call refresh endpoint using a fresh axios instance with proper config
+        const { data } = await axios.post(
+          `${api.defaults.baseURL}/auth/refresh`,
+          { refreshToken },
+          {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+          }
+        );
         
         if (data.success && data.accessToken) {
           // Store the new tokens
