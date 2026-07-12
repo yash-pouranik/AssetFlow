@@ -14,7 +14,7 @@ const PRIVILEGED_ROLES = ['ADMIN', 'ASSET_MANAGER'] as const;
 async function requireCycle(cycleId: string) {
   const cycle = await AuditRepository.findCycleById(cycleId);
   if (!cycle) {
-    throw new NotFoundError(`Audit cycle '${cycleId}' not found`);
+    throw new NotFoundError(`Audit cycle '${cycleId}'`);
   }
   return cycle;
 }
@@ -131,7 +131,7 @@ export async function markAuditItem(
   const item = await AuditRepository.findAuditItem(cycleId, dto.assetId);
   if (!item) {
     throw new NotFoundError(
-      `No audit item found for asset '${dto.assetId}' in cycle '${cycleId}'.`,
+      `No audit item for asset '${dto.assetId}' in cycle '${cycleId}'`,
     );
   }
 
@@ -261,7 +261,7 @@ export async function getAllCycles(
 export async function getCycleById(id: string) {
   const cycle = await AuditRepository.findCycleById(id);
   if (!cycle) {
-    throw new NotFoundError(`Audit cycle '${id}' not found`);
+    throw new NotFoundError(`Audit cycle '${id}'`);
   }
   return cycle;
 }

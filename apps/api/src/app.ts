@@ -113,11 +113,11 @@ app.use('/api/assets', assetRoutes);
 app.use('/api', allocationRoutes);             // /api/allocations + /api/transfers
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
-app.use('/api', auditRoutes);                   // /api/audit-cycles
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/activity-logs', activityLogRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api', auditRoutes);                   // /api/audit-cycles
 
 // ─────────────────────────────────────────────
 // 404 Handler
