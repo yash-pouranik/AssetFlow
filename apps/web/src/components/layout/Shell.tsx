@@ -84,10 +84,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
+    <div className="flex h-screen bg-gray-50 dark:bg-black overflow-hidden">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-700">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-zinc-900 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-zinc-900">
           <Link href="/dashboard" className="flex items-center gap-2 text-primary">
             <Box size={28} className="stroke-[1.5]" />
             <span className="text-xl font-bold tracking-tight">AssetFlow</span>
@@ -108,7 +108,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${isActive ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'}`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors ${isActive ? 'bg-primary/10 text-primary font-medium' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:text-gray-900 dark:hover:text-white'}`}
                   >
                     <item.icon size={18} />
                     {item.label}
@@ -123,7 +123,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Topbar */}
-        <header className="h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <header className="h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-900">
           <div className="flex items-center">
             <button className="lg:hidden p-2 -ml-2 text-gray-500 hover:text-gray-900 dark:hover:text-white" onClick={() => setMobileMenuOpen(true)}>
               <Menu size={24} />
@@ -153,7 +153,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                     <p className="text-sm font-medium text-gray-900 dark:text-white leading-none">{user.name}</p>
                     <p className="text-xs text-gray-500 mt-1">{user.role}</p>
                   </div>
-                  <Avatar className="h-9 w-9 border border-gray-200 dark:border-gray-700">
+                  <Avatar className="h-9 w-9 border border-gray-200 dark:border-zinc-900">
                     <AvatarFallback className="bg-primary/10 text-primary">
                       {user.name.substring(0, 2).toUpperCase()}
                     </AvatarFallback>

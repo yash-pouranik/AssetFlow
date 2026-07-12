@@ -258,7 +258,7 @@ router.get('/booking-heatmap', authenticate, managerOrAdmin, async (req: Request
         (DAYOFWEEK(createdAt) - 1)  AS dayOfWeek,
         HOUR(createdAt)             AS hour,
         COUNT(*)                    AS count
-      FROM Booking
+      FROM bookings
       GROUP BY dayOfWeek, hour
       ORDER BY dayOfWeek, hour
     `;
