@@ -123,6 +123,9 @@ Follow these instructions to set up the project locally on your machine.
    npx prisma db seed
    ```
 
+   > [!TIP]
+   > If you encounter seeding issues, verify MySQL server connection details and run `npx prisma db seed` directly to pre-populate dummy assets and user roles.
+
 5. **Start the Development Servers**
    Open two terminal tabs/windows:
 
