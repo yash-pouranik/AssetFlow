@@ -1,81 +1,171 @@
-# AssetFlow — Enterprise Asset & Resource Management System
+<div align="center">
+  
+# 🚀 AssetFlow
+### *Enterprise Asset & Resource Management System*
 
-![AssetFlow Banner](docs/banner-bw.png)
+![AssetFlow](https://img.shields.io/badge/AssetFlow-ERP-4f46e5?style=for-the-badge&logo=react)
+![Next.js](https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-![AssetFlow](https://img.shields.io/badge/AssetFlow-ERP-4f46e5?style=for-the-badge)
+The vision for **AssetFlow** is to simplify and digitize how organizations track, allocate, and maintain their physical assets and shared resources through a centralized ERP platform. Built for scale, clarity, and performance.
 
-A modern, role-based ERP designed to track, allocate, and maintain enterprise assets with a beautiful Next.js frontend and a robust Express backend. Built for scalability, transparency, and ease of use.
+[Explore Features](#-core-features) • [Tech Stack](#%EF%B8%8F-tech-stack) • [Installation](#-getting-started) • [API Overview](#-api-architecture)
+</div>
 
-## Features
+---
 
-- 🔐 **Role-Based Access Control (RBAC):** Distinct views and permissions for Admins, Asset Managers, Department Heads, and Employees.
-- 📦 **Asset Directory & Registration:** Track assets with auto-generated tags, QR code readiness, and condition logs.
-- 🤝 **Allocations & Transfers:** Conflict-free allocation with a built-in peer-to-peer transfer request workflow.
-- 📅 **Resource Booking:** Conflict-preventing booking system for shared resources like conference rooms and vehicles.
-- 🔧 **Maintenance Tracking:** Full lifecycle tracking from raising a request to technician resolution.
-- 🛡️ **Audit Cycles:** Create physical audits, assign auditors, and generate discrepancy reports.
-- 📊 **Dashboards & Analytics:** Live KPIs and charts for utilization and maintenance frequency.
+## 📖 Table of Contents
+- [About The Project](#about-the-project)
+- [✨ Core Features](#-core-features)
+- [🛠️ Tech Stack](#%EF%B8%8F-tech-stack)
+- [📦 Project Structure](#-project-structure)
+- [🚀 Getting Started](#-getting-started)
+- [👥 Role-Based Access (RBAC)](#-role-based-access-rbac)
+- [🔐 Demo Accounts](#-demo-credentials)
 
-## Tech Stack
+---
 
-**Frontend:**
-- Next.js 14 (App Router)
-- React, TypeScript
-- Tailwind CSS & shadcn/ui
-- Zustand (State Management)
-- React Query (Data Fetching)
-- Recharts (Data Visualization)
+## About The Project
 
-**Backend:**
-- Node.js & Express
-- TypeScript
-- Prisma ORM
-- MySQL
-- JWT Authentication
+AssetFlow eliminates the chaos of manual tracking (spreadsheets, paper logs) by enabling structured asset lifecycles, centralized resource booking, and real-time visibility into who holds what, where it is, and its condition. Designed with a clean architecture, role-based workflows, and a scalable module design, it handles the core complexities of enterprise resource management seamlessly.
 
-## Getting Started
+---
+
+## ✨ Core Features
+
+* **🔐 Role-Based Access Control (RBAC)**: Deep authorization mapping spanning across **Admin**, **Asset Manager**, **Department Head**, and **Employee** roles.
+* **📦 Asset Directory & Registration**: Track assets through a flexible lifecycle (Available, Allocated, Reserved, Maintenance, Lost, Retired). 
+* **🤝 Allocations & Transfers**: Smart conflict handling prevents double-allocation. Employees can request peer-to-peer transfers!
+* **📅 Resource Booking**: Conflict-preventing time-slot booking system for shared resources like conference rooms or specialized equipment.
+* **🔧 Maintenance Workflows**: Structured approval routing (Pending → Approved → Technician Assigned → Resolved).
+* **🛡️ Audit Cycles**: Run scheduled physical audit cycles with assigned auditors and auto-generated discrepancy reports.
+* **📊 Dashboards & Analytics**: Live KPI charts, overdue alerts, and utilization heatmaps powered by `Recharts`.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend (Client-side)
+* **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+* **Language**: TypeScript
+* **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [shadcn/ui](https://ui.shadcn.com/)
+* **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) (Persisted)
+* **Data Fetching**: [TanStack React Query](https://tanstack.com/query/latest)
+* **Forms & Validation**: React Hook Form + Zod
+* **Data Visualization**: Recharts
+
+### Backend (Server-side)
+* **Framework**: [Node.js](https://nodejs.org/) & Express
+* **Database**: MySQL
+* **ORM**: [Prisma](https://www.prisma.io/)
+* **Authentication**: JWT (Access & Refresh Tokens)
+* **Architecture**: Modular Controller-Service-Repository pattern with Event-driven (EventBus) hooks.
+
+---
+
+## 📦 Project Structure
+
+This is a Monorepo powered by `pnpm` workspaces.
+
+```text
+AssetFlow/
+├── apps/
+│   ├── api/                 # Express backend (Prisma, JWT, REST APIs)
+│   │   ├── prisma/          # Database schema & migrations
+│   │   └── src/
+│   │       ├── modules/     # Domain-driven modules (auth, assets, bookings, etc.)
+│   │       └── shared/      # Middleware, AppError, EventBus, Utils
+│   └── web/                 # Next.js frontend (Tailwind, shadcn, Zustand)
+│       └── src/
+│           ├── app/         # App Router (Pages & Layouts)
+│           ├── components/  # Reusable UI components
+│           ├── lib/         # Axios interceptors & utilities
+│           └── store/       # Zustand state management
+└── package.json             # Workspace config
+```
+
+---
+
+## 🚀 Getting Started
+
+Follow these instructions to set up the project locally on your machine.
 
 ### Prerequisites
-- Node.js (v18+)
-- pnpm (v8+)
-- MySQL server running locally
+* **Node.js**: `v18.x` or higher
+* **pnpm**: `v8.x` or higher (`npm install -g pnpm`)
+* **MySQL**: A running local or remote instance
 
-### Installation
+### Installation & Setup
 
-1. Install dependencies at the root workspace:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/AssetFlow.git
+   cd AssetFlow
+   ```
+
+2. **Install Workspace Dependencies**
    ```bash
    pnpm install
    ```
 
-2. Setup the database:
-   Update the `DATABASE_URL` in `apps/api/.env` if necessary.
+3. **Configure Environment Variables**
+   * Set up your `apps/api/.env` (Database URL, JWT Secrets, Port)
+   * Set up your `apps/web/.env.local` (Next.js public API URL)
+
+4. **Initialize Database**
+   Run the Prisma migrations and seed the database with demo data.
    ```bash
    cd apps/api
-   npx prisma@5 migrate dev --name init
-   npx prisma@5 db seed
+   npx prisma generate
+   npx prisma migrate dev --name init
+   npx prisma db seed
    ```
 
-3. Run the Backend API:
+5. **Start the Development Servers**
+   Open two terminal tabs/windows:
+
+   *Terminal 1 (Backend API):*
    ```bash
    cd apps/api
    pnpm run dev
+   # Server runs on http://localhost:5000
    ```
-   *(API runs on http://localhost:5000)*
 
-4. Run the Frontend App:
+   *Terminal 2 (Frontend Web):*
    ```bash
    cd apps/web
    pnpm run dev
+   # App runs on http://localhost:3000
    ```
-   *(Web runs on http://localhost:3000)*
-
-## Demo Credentials
-
-The database seeder automatically creates the following demo accounts:
-- **Admin:** `admin@assetflow.com` / `Admin@123`
-- **Asset Manager:** `manager@assetflow.com` / `Employee@123`
-- **Dept Head:** `depthead@assetflow.com` / `Employee@123`
-- **Employee:** `raj@assetflow.com` / `Employee@123`
 
 ---
-*Built with ❤️ during the Hackathon.*
+
+## 👥 Role-Based Access (RBAC)
+
+AssetFlow employs a strict hierarchy for permissions:
+
+| Role | Capabilities |
+| :--- | :--- |
+| **Admin** | Full system access. Manages Organization setup (Departments, Categories, Roles). |
+| **Asset Manager** | Registers/Allocates assets. Approves transfers, maintenance, and audit cycles. |
+| **Department Head** | Views department assets. Approves intra-department transfers. Books resources. |
+| **Employee** | Views assigned assets. Books shared resources. Raises maintenance requests. |
+
+---
+
+## 🔐 Demo Credentials
+
+Use these seeded accounts to instantly test out different RBAC capabilities:
+
+* **👑 Admin:** `admin@assetflow.com` (Pass: `Admin@123`)
+* **💼 Asset Manager:** `manager@assetflow.com` (Pass: `Employee@123`)
+* **🏢 Dept Head:** `depthead@assetflow.com` (Pass: `Employee@123`)
+* **👤 Employee:** `raj@assetflow.com` (Pass: `Employee@123`)
+
+---
+
+<div align="center">
+  <p>Built with 💡 and ☕ for the Hackathon</p>
+</div>
