@@ -531,7 +531,7 @@ export default function OrganizationPage() {
                 <Label htmlFor="dept-status">Status</Label>
                 <Select
                   value={deptForm.status}
-                  onValueChange={(val: 'ACTIVE' | 'INACTIVE') => setDeptForm({ ...deptForm, status: val })}
+                  onValueChange={(val) => setDeptForm({ ...deptForm, status: (val || 'ACTIVE') as 'ACTIVE' | 'INACTIVE' })}
                 >
                   <SelectTrigger id="dept-status">
                     <SelectValue placeholder="Select Status" />
@@ -547,7 +547,7 @@ export default function OrganizationPage() {
                 <Label htmlFor="dept-parent">Parent Department</Label>
                 <Select
                   value={deptForm.parentId || 'none'}
-                  onValueChange={(val) => setDeptForm({ ...deptForm, parentId: val === 'none' ? '' : val })}
+                  onValueChange={(val) => setDeptForm({ ...deptForm, parentId: val === 'none' || !val ? '' : val })}
                 >
                   <SelectTrigger id="dept-parent">
                     <SelectValue placeholder="None (Top-level)" />
@@ -569,7 +569,7 @@ export default function OrganizationPage() {
                 <Label htmlFor="dept-head">Department Head</Label>
                 <Select
                   value={deptForm.headId || 'none'}
-                  onValueChange={(val) => setDeptForm({ ...deptForm, headId: val === 'none' ? '' : val })}
+                  onValueChange={(val) => setDeptForm({ ...deptForm, headId: val === 'none' || !val ? '' : val })}
                 >
                   <SelectTrigger id="dept-head">
                     <SelectValue placeholder="None" />

@@ -413,7 +413,7 @@ export default function BookingsPage() {
                 </CardTitle>
                 <CardDescription>Select a resource below to view availability and bookings.</CardDescription>
               </div>
-              <Select value={selectedAssetId} onValueChange={(val) => setSelectedAssetId(val || '')}>
+              <Select value={selectedAssetId} onValueChange={(value) => setSelectedAssetId(value || '')}>
                 <SelectTrigger className="w-[220px] bg-white dark:bg-slate-950">
                   <SelectValue placeholder="Select a resource" />
                 </SelectTrigger>

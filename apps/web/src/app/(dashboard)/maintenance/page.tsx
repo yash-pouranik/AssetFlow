@@ -61,6 +61,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  role?: string;
 }
 
 interface MaintenanceRequest {
@@ -372,7 +373,7 @@ export default function MaintenancePage() {
               <div className="grid gap-4 py-4">
                 <div className="grid gap-1">
                   <Label htmlFor="asset">Asset</Label>
-                  <Select value={assetId} onValueChange={setAssetId}>
+                  <Select value={assetId} onValueChange={(val) => setAssetId(val || '')}>
                     <SelectTrigger id="asset" disabled={assetsLoading}>
                       <SelectValue placeholder="Select an asset" />
                     </SelectTrigger>
@@ -389,7 +390,7 @@ export default function MaintenancePage() {
                   <Label htmlFor="priority">Priority</Label>
                   <Select
                     value={priority}
-                    onValueChange={(v) => setPriority(v as MaintenancePriority)}
+                    onValueChange={(v) => setPriority((v || 'MEDIUM') as MaintenancePriority)}
                   >
                     <SelectTrigger id="priority">
                       <SelectValue placeholder="Select priority" />
@@ -648,7 +649,7 @@ export default function MaintenancePage() {
               </div>
               <div className="grid gap-1">
                 <Label htmlFor="approveTech">Assign Technician (Optional)</Label>
-                <Select value={selectedTechId} onValueChange={setSelectedTechId}>
+                <Select value={selectedTechId} onValueChange={(val) => setSelectedTechId(val || '')}>
                   <SelectTrigger id="approveTech">
                     <SelectValue placeholder="Select technician to assign immediately" />
                   </SelectTrigger>
@@ -684,7 +685,7 @@ export default function MaintenancePage() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-1">
                 <Label htmlFor="assignTech">Select Technician</Label>
-                <Select value={selectedTechId} onValueChange={setSelectedTechId}>
+                <Select value={selectedTechId} onValueChange={(val) => setSelectedTechId(val || '')}>
                   <SelectTrigger id="assignTech">
                     <SelectValue placeholder="Select an active technician" />
                   </SelectTrigger>
