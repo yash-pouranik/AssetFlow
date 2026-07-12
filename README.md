@@ -1,5 +1,7 @@
 # AssetFlow — Enterprise Asset & Resource Management System
 
+![AssetFlow Banner](docs/banner.png)
+
 ![AssetFlow](https://img.shields.io/badge/AssetFlow-ERP-4f46e5?style=for-the-badge)
 
 A modern, role-based ERP designed to track, allocate, and maintain enterprise assets with a beautiful Next.js frontend and a robust Express backend. Built for scalability, transparency, and ease of use.
