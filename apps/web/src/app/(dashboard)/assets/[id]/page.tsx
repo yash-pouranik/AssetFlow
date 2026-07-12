@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import { 
   ArrowLeft, 
+  Edit2,
+  Trash2, 
   Calendar, 
   DollarSign, 
   AlertTriangle, 
@@ -15,6 +17,27 @@ import {
   MapPin
 } from "lucide-react";
 import api from "@/lib/api";
+import { useAuthStore } from "@/store/auth";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -85,11 +108,47 @@ type AssetDetail = {
 
 export default function AssetDetailPage() {
   const params = useParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { user } = useAuthStore();
+  const canManage = user?.role === "ADMIN" || user?.role === "ASSET_MANAGER";
   const id = params?.id as string;
 
   const [asset, setAsset] = useState<AssetDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [formData, setFormData] = useState<any>({});
+  
+  const updateMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const res = await api.put(`/assets/${id}`, data);
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Asset updated successfully");
+      setIsEditOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['assets'] });
+      window.location.reload();
+    },
+    onError: (err: any) => {
+      toast.error(err?.response?.data?.message || "Failed to update asset");
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      await api.delete(`/assets/${id}`);
+    },
+    onSuccess: () => {
+      toast.success("Asset deleted successfully");
+      router.push("/assets");
+    },
+    onError: (err: any) => {
+      toast.error(err?.response?.data?.message || "Failed to delete asset");
+    }
+  });
 
   useEffect(() => {
     if (!id) return;
@@ -99,6 +158,15 @@ export default function AssetDetailPage() {
         const response = await api.get(`/assets/${id}`);
         if (response.data.success) {
           setAsset(response.data.data);
+          setFormData({
+            name: response.data.data.name,
+            tag: response.data.data.tag,
+            serialNumber: response.data.data.serialNumber || "",
+            location: response.data.data.location || "",
+            condition: response.data.data.condition,
+            isBookable: response.data.data.isBookable,
+            notes: response.data.data.notes || "",
+          });
         } else {
           setError("Failed to load asset details.");
         }
@@ -189,20 +257,112 @@ export default function AssetDetailPage() {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 max-w-6xl mx-auto w-full">
-      <div className="flex items-center space-x-2">
-        <Link href="/assets">
-          <Button variant="ghost" size="icon" className="hover:bg-transparent">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-3xl font-bold tracking-tight">{asset.name}</h2>
-            <Badge variant="outline" className="text-sm font-semibold">{asset.tag}</Badge>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <Link href="/assets">
+            <Button variant="ghost" size="icon" className="hover:bg-transparent">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-3xl font-bold tracking-tight">{asset.name}</h2>
+              <Badge variant="outline" className="text-sm font-semibold">{asset.tag}</Badge>
+            </div>
+            <p className="text-sm text-muted-foreground">Category: {asset.category?.name}</p>
           </div>
-          <p className="text-sm text-muted-foreground">Category: {asset.category?.name}</p>
         </div>
+        {canManage && (
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setIsEditOpen(true)} className="gap-2">
+              <Edit2 className="h-4 w-4" /> Edit
+            </Button>
+            {user?.role === "ADMIN" && (
+              <Button variant="destructive" size="sm" onClick={() => setIsDeleteOpen(true)} className="gap-2">
+                <Trash2 className="h-4 w-4" /> Delete
+              </Button>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Edit Asset</DialogTitle>
+            <DialogDescription>Update asset properties.</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Name</Label>
+                <Input value={formData.name || ""} onChange={e => setFormData({...formData, name: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <Label>Tag</Label>
+                <Input value={formData.tag || ""} onChange={e => setFormData({...formData, tag: e.target.value})} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Serial Number</Label>
+                <Input value={formData.serialNumber || ""} onChange={e => setFormData({...formData, serialNumber: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <Label>Location</Label>
+                <Input value={formData.location || ""} onChange={e => setFormData({...formData, location: e.target.value})} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Condition</Label>
+                <Select value={formData.condition} onValueChange={v => setFormData({...formData, condition: v})}>
+                  <SelectTrigger><SelectValue/></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="EXCELLENT">Excellent</SelectItem>
+                    <SelectItem value="GOOD">Good</SelectItem>
+                    <SelectItem value="FAIR">Fair</SelectItem>
+                    <SelectItem value="POOR">Poor</SelectItem>
+                    <SelectItem value="DAMAGED">Damaged</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2 flex flex-col justify-end">
+                <div className="flex items-center space-x-2 pb-2">
+                  <Switch checked={formData.isBookable} onCheckedChange={c => setFormData({...formData, isBookable: c})} />
+                  <Label>Is Bookable</Label>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Notes</Label>
+              <Textarea value={formData.notes || ""} onChange={e => setFormData({...formData, notes: e.target.value})} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditOpen(false)}>Cancel</Button>
+            <Button disabled={updateMutation.isPending} onClick={() => updateMutation.mutate(formData)}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Dialog */}
+      <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Asset</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete {asset.name}? This action cannot be undone.
+              Note: Assets with active allocations cannot be deleted.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
+            <Button variant="destructive" disabled={deleteMutation.isPending} onClick={() => deleteMutation.mutate()}>Delete</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid gap-6 md:grid-cols-3">
         {/* Profile Card */}

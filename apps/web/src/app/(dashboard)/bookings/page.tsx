@@ -325,7 +325,7 @@ export default function BookingsPage() {
                 <Label htmlFor="asset">Asset / Resource</Label>
                 <Select
                   value={formData.assetId}
-                  onValueChange={(value) => setFormData({ ...formData, assetId: value })}
+                  onValueChange={(value) => setFormData({ ...formData, assetId: value || '' })}
                   disabled={isLoadingAssets}
                 >
                   <SelectTrigger id="asset" className="w-full">
@@ -413,7 +413,7 @@ export default function BookingsPage() {
                 </CardTitle>
                 <CardDescription>Select a resource below to view availability and bookings.</CardDescription>
               </div>
-              <Select value={selectedAssetId} onValueChange={setSelectedAssetId}>
+              <Select value={selectedAssetId} onValueChange={(val) => setSelectedAssetId(val || '')}>
                 <SelectTrigger className="w-[220px] bg-white dark:bg-slate-950">
                   <SelectValue placeholder="Select a resource" />
                 </SelectTrigger>

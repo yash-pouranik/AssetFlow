@@ -5,6 +5,18 @@ import { eventBus, EVENTS } from '../../shared/events/eventBus';
 import { bookingRepository, BookingFilters } from './booking.repository';
 import { CreateBookingInput, UpdateBookingInput } from './booking.dto';
 
+const formatConflictDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  }).format(date) + ' (GMT+5:30)';
+};
+
 // ─── Service ──────────────────────────────────────────────────────────────────
 
 export const bookingService = {
@@ -47,8 +59,8 @@ export const bookingService = {
     if (overlapping.length > 0) {
       const conflict = overlapping[0];
       throw new ConflictError(
-        `Asset is already booked from ${conflict.startTime.toISOString()} ` +
-          `to ${conflict.endTime.toISOString()}`
+        `Asset is already booked from ${formatConflictDate(conflict.startTime)} ` +
+          `to ${formatConflictDate(conflict.endTime)}`
       );
     }
 
@@ -210,8 +222,8 @@ export const bookingService = {
       if (overlapping.length > 0) {
         const conflict = overlapping[0];
         throw new ConflictError(
-          `Asset is already booked from ${conflict.startTime.toISOString()} ` +
-            `to ${conflict.endTime.toISOString()}`
+          `Asset is already booked from ${formatConflictDate(conflict.startTime)} ` +
+            `to ${formatConflictDate(conflict.endTime)}`
         );
       }
     }
