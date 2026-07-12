@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -29,6 +30,8 @@ const formSchema = z.object({
     required_error: "Please select a condition",
   }),
   location: z.string().optional(),
+  isBookable: z.boolean().default(false),
+  photoUrl: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -51,13 +54,15 @@ export default function RegisterAssetPage() {
     watch,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as any,
     defaultValues: {
       name: "",
       categoryId: "",
       serialNumber: "",
       condition: "GOOD",
       location: "",
+      isBookable: false,
+      photoUrl: "",
     },
   });
 
@@ -66,8 +71,6 @@ export default function RegisterAssetPage() {
       try {
         const response = await api.get("/categories");
         if (response.data.success) {
-          // Check if data is paginated or not, adjust as needed
-          // Some GET routes return { data: { data: [], meta: {} } }
           const categoriesData = Array.isArray(response.data.data) 
             ? response.data.data 
             : response.data.data.data || [];
@@ -84,7 +87,14 @@ export default function RegisterAssetPage() {
     setIsSubmitting(true);
     setError(null);
     try {
-      const response = await api.post("/assets", data);
+      const response = await api.post("/assets", {
+        name: data.name,
+        categoryId: data.categoryId,
+        serialNumber: data.serialNumber || undefined,
+        condition: data.condition,
+        location: data.location || undefined,
+        isBookable: data.isBookable,
+      });
       if (response.data.success) {
         router.push("/assets");
         router.refresh();
@@ -105,9 +115,11 @@ export default function RegisterAssetPage() {
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 max-w-3xl mx-auto w-full">
       <div className="flex items-center space-x-2">
-        <Button variant="ghost" size="icon" className="hover:bg-transparent" render={<Link href="/assets" />}>
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
+        <Link href="/assets">
+          <Button variant="ghost" size="icon" className="hover:bg-transparent">
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+        </Link>
         <h2 className="text-3xl font-bold tracking-tight">Register Asset</h2>
       </div>
 
@@ -204,12 +216,42 @@ export default function RegisterAssetPage() {
                   {...register("location")}
                 />
               </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="photoUrl" className="text-sm font-medium">Photo / Document URL (Mockup)</Label>
+                <Input
+                  id="photoUrl"
+                  placeholder="e.g. https://images.unsplash.com/... or /docs/receipt.pdf"
+                  {...register("photoUrl")}
+                />
+              </div>
+
+              <div className="flex items-start space-x-2 md:col-span-2 pt-2">
+                <Checkbox
+                  id="isBookable"
+                  checked={watch("isBookable")}
+                  onCheckedChange={(checked) => setValue("isBookable", !!checked, { shouldValidate: true })}
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <Label
+                    htmlFor="isBookable"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Allow Booking
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    This asset can be booked/reserved by team members.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-end gap-4 pt-6 border-t">
-              <Button type="button" variant="outline" render={<Link href="/assets" />}>
-                Cancel
-              </Button>
+              <Link href="/assets">
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
+              </Link>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>

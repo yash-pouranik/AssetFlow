@@ -35,7 +35,7 @@ export const ResetPasswordDto = z.object({
 });
 
 export const PromoteRoleDto = z.object({
-  role: z.enum(['ASSET_MANAGER', 'DEPARTMENT_HEAD', 'EMPLOYEE']),
+  role: z.enum(['ADMIN', 'ASSET_MANAGER', 'DEPARTMENT_HEAD', 'EMPLOYEE']),
 });
 
 export type SignupInput = z.infer<typeof SignupDto>;

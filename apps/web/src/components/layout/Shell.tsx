@@ -32,6 +32,7 @@ const navItems = [
   { href: '/audits', label: 'Audits', icon: ShieldCheck, roles: ['ADMIN', 'ASSET_MANAGER'] },
   { href: '/reports', label: 'Reports', icon: BarChart3, roles: ['ADMIN', 'ASSET_MANAGER', 'DEPT_HEAD'] },
   { href: '/organization', label: 'Organization', icon: Box, roles: ['ADMIN'] },
+  { href: '/activity', label: 'Activity Logs', icon: Bell, roles: ['ADMIN', 'ASSET_MANAGER', 'DEPT_HEAD', 'EMPLOYEE'] },
 ];
 
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -39,16 +40,30 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { isAuthenticated, user, logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    if (!isAuthenticated) {
+    
+    // Check if store is already hydrated
+    setIsHydrated(useAuthStore.persist.hasHydrated());
+    
+    // Subscribe to hydration events
+    const unsub = useAuthStore.persist.onFinishHydration(() => setIsHydrated(true));
+    
+    return () => {
+      unsub();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (mounted && isHydrated && !isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isHydrated, mounted, router]);
 
-  if (!mounted || !isAuthenticated || !user) return null;
+  if (!mounted || !isHydrated || !isAuthenticated || !user) return null;
 
   const allowedNavItems = navItems.filter(item => item.roles.includes(user.role));
 
@@ -105,10 +120,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="relative text-gray-500">
-              <Bell size={20} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
-            </Button>
+            <Link href="/activity">
+              <Button variant="ghost" size="icon" className="relative text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                <Bell size={20} />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+              </Button>
+            </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none cursor-pointer outline-none border-none bg-transparent">

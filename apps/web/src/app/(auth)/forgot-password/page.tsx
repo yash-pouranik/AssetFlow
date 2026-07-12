@@ -40,12 +40,12 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null);
 
   const requestForm = useForm<RequestOtpForm>({
-    resolver: zodResolver(requestOtpSchema),
+    resolver: zodResolver(requestOtpSchema as any),
     defaultValues: { email: '' },
   });
 
   const resetForm = useForm<ResetPasswordForm>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: zodResolver(resetPasswordSchema as any),
     defaultValues: { otp: '', password: '' },
   });
 

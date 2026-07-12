@@ -1,4 +1,4 @@
-﻿import { Prisma, AssetStatus } from '@prisma/client';
+import { Prisma, AssetStatus } from '@prisma/client';
 import { prisma } from '../../shared/prisma/client';
 import { AssetSearchDto } from './asset.dto';
 
@@ -27,16 +27,16 @@ export const AssetRepository = {
     const skip = (safePage - 1) * safeLimit;
 
     const where: Prisma.AssetWhereInput = {
-      ...(tag && { tag: { contains: tag, mode: 'insensitive' } }),
-      ...(serialNumber && { serialNumber: { contains: serialNumber, mode: 'insensitive' } }),
+      ...(tag && { tag: { contains: tag } }),
+      ...(serialNumber && { serialNumber: { contains: serialNumber } }),
       ...(categoryId && { categoryId }),
       ...(status && { status }),
       ...(departmentId && { departmentId }),
-      ...(location && { location: { contains: location, mode: 'insensitive' } }),
+      ...(location && { location: { contains: location } }),
       ...(search && {
         OR: [
-          { name: { contains: search, mode: 'insensitive' } },
-          { tag: { contains: search, mode: 'insensitive' } },
+          { name: { contains: search } },
+          { tag: { contains: search } },
         ],
       }),
     };
@@ -100,7 +100,7 @@ export const AssetRepository = {
    */
   async findBySerialNumber(serialNumber: string) {
     return prisma.asset.findFirst({
-      where: { serialNumber: { equals: serialNumber, mode: 'insensitive' } },
+      where: { serialNumber },
     });
   },
 

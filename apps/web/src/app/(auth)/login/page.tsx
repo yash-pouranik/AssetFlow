@@ -35,7 +35,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema as any),
     defaultValues: { email: '', password: '' },
   });
 

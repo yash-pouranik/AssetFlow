@@ -25,7 +25,7 @@ type Asset = {
   serialNumber: string | null;
   location: string | null;
   condition: "EXCELLENT" | "GOOD" | "FAIR" | "POOR" | "DAMAGED";
-  status: "ACTIVE" | "MAINTENANCE" | "RETIRED" | "LOST";
+  status: "AVAILABLE" | "ALLOCATED" | "UNDER_MAINTENANCE" | "RETIRED" | "LOST" | "STOLEN" | "DISPOSED";
   category: {
     id: string;
     name: string;
@@ -43,17 +43,26 @@ export default function AssetsPage() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [meta, setMeta] = useState<Meta | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchAssets = async () => {
       try {
-        const response = await api.get("/assets");
+        const response = await api.get("/assets", {
+          params: searchQuery ? { search: searchQuery } : undefined
+        });
         if (response.data.success) {
-          setAssets(response.data.data || []);
+          const payload = response.data;
+          // Standardize parsing for Assets list
+          const dataArray = Array.isArray(payload.data)
+            ? payload.data
+            : (payload.data?.data && Array.isArray(payload.data.data) ? payload.data.data : []);
+          
+          setAssets(dataArray);
           setMeta({
-            total: response.data.total || 0,
-            page: response.data.page || 1,
-            limit: response.data.limit || 20,
+            total: payload.total ?? payload.data?.total ?? 0,
+            page: payload.page ?? payload.data?.page ?? 1,
+            limit: payload.limit ?? payload.data?.limit ?? 20,
           });
         }
       } catch (error) {
@@ -63,12 +72,13 @@ export default function AssetsPage() {
       }
     };
     fetchAssets();
-  }, []);
+  }, [searchQuery]);
 
   const getStatusBadge = (status: Asset['status']) => {
     switch (status) {
-      case 'ACTIVE': return <Badge variant="default" className="bg-green-500 hover:bg-green-600">Active</Badge>;
-      case 'MAINTENANCE': return <Badge variant="secondary" className="bg-yellow-500 text-white hover:bg-yellow-600">Maintenance</Badge>;
+      case 'AVAILABLE': return <Badge variant="default" className="bg-green-500 hover:bg-green-600 text-white">Available</Badge>;
+      case 'ALLOCATED': return <Badge variant="secondary" className="bg-blue-500 hover:bg-blue-600 text-white">Allocated</Badge>;
+      case 'UNDER_MAINTENANCE': return <Badge variant="outline" className="bg-yellow-500 text-white hover:bg-yellow-600 border-none">Maintenance</Badge>;
       case 'RETIRED': return <Badge variant="outline">Retired</Badge>;
       case 'LOST': return <Badge variant="destructive">Lost</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
@@ -111,7 +121,12 @@ export default function AssetsPage() {
           <div className="flex items-center mb-4 space-x-2">
             <div className="relative w-full max-w-sm">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search assets..." className="pl-8" />
+              <Input
+                placeholder="Search assets..."
+                className="pl-8"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
           </div>
           <div className="rounded-md border">
@@ -121,20 +136,22 @@ export default function AssetsPage() {
                   <TableHead className="w-[100px]">Tag</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Category</TableHead>
+                  <TableHead>Condition</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Location</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="h-24 text-center">
+                    <TableCell colSpan={7} className="h-24 text-center">
                       Loading assets...
                     </TableCell>
                   </TableRow>
                 ) : assets.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                    <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
                       No assets found. Register one to get started.
                     </TableCell>
                   </TableRow>
@@ -144,8 +161,16 @@ export default function AssetsPage() {
                       <TableCell className="font-medium">{asset.tag}</TableCell>
                       <TableCell>{asset.name}</TableCell>
                       <TableCell>{asset.category?.name || "Uncategorized"}</TableCell>
+                      <TableCell>{getConditionBadge(asset.condition)}</TableCell>
                       <TableCell>{getStatusBadge(asset.status)}</TableCell>
                       <TableCell>{asset.location || "-"}</TableCell>
+                      <TableCell className="text-right">
+                        <Link href={`/assets/${asset.id}`}>
+                          <Button variant="outline" size="sm">
+                            View Details
+                          </Button>
+                        </Link>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}

@@ -46,30 +46,7 @@ router.post(
   allocationController.allocate,
 );
 
-/**
- * GET /allocations/:id
- * Retrieve a single allocation by ID (department head and above).
- */
-router.get(
-  '/:id',
-  deptHeadOrAbove,
-  allocationController.getById,
-);
 
-/**
- * POST /allocations/:id/return
- * Return an allocated asset (department head and above).
- */
-router.post(
-  '/:id/return',
-  deptHeadOrAbove,
-  validate(ReturnAssetDto),
-  allocationController.returnAsset,
-);
-
-// ---------------------------------------------------------------------------
-// Transfer routes
-// ---------------------------------------------------------------------------
 
 /**
  * GET /transfers
@@ -111,6 +88,31 @@ router.patch(
   managerOrAdmin,
   validate(ApproveTransferDto),
   allocationController.approveTransfer,
+);
+
+// ---------------------------------------------------------------------------
+// Parameterized Allocation routes (must be at the bottom)
+// ---------------------------------------------------------------------------
+
+/**
+ * GET /allocations/:id
+ * Retrieve a single allocation by ID (department head and above).
+ */
+router.get(
+  '/:id',
+  deptHeadOrAbove,
+  allocationController.getById,
+);
+
+/**
+ * POST /allocations/:id/return
+ * Return an allocated asset (department head and above).
+ */
+router.post(
+  '/:id/return',
+  deptHeadOrAbove,
+  validate(ReturnAssetDto),
+  allocationController.returnAsset,
 );
 
 export default router;

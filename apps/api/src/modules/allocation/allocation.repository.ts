@@ -54,8 +54,6 @@ export async function findAllocationById(id: string) {
       },
       user: { select: { id: true, name: true, email: true, role: true } },
       department: { select: { id: true, name: true } },
-      allocatedBy: { select: { id: true, name: true, email: true } },
-      returnedBy: { select: { id: true, name: true, email: true } },
       transfers: {
         orderBy: { requestedAt: 'desc' },
         include: {
@@ -93,7 +91,6 @@ export async function findAll(
         asset: { select: { id: true, tag: true, name: true, status: true } },
         user: { select: { id: true, name: true, email: true } },
         department: { select: { id: true, name: true } },
-        allocatedBy: { select: { id: true, name: true } },
       },
     }),
     prisma.allocation.count({ where }),
