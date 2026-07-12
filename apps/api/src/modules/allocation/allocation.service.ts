@@ -172,7 +172,6 @@ export async function requestTransfer(
     ...(data.targetDeptId && { targetDepartment: { connect: { id: data.targetDeptId } } }),
     notes: data.notes ?? null,
     status: 'REQUESTED',
-    requestedAt: new Date(),
   });
 
   // 5. Emit event (notification service subscribes to notify approvers)
@@ -218,7 +217,6 @@ export async function approveTransfer(
     await allocationRepo.updateTransfer(transferId, {
       status: 'APPROVED',
       approvedBy: { connect: { id: approvedById } },
-      approvedAt: new Date(),
       notes: notes ?? null,
     });
 
@@ -238,8 +236,8 @@ export async function approveTransfer(
       ...(transfer.targetUserId && {
         user: { connect: { id: transfer.targetUserId } },
       }),
-      ...(transfer.targetDepartmentId && {
-        department: { connect: { id: transfer.targetDepartmentId } },
+      ...(transfer.targetDeptId && {
+        department: { connect: { id: transfer.targetDeptId } },
       }),
       status: 'ACTIVE',
       allocatedAt: new Date(),
@@ -250,7 +248,6 @@ export async function approveTransfer(
     const completed = await allocationRepo.updateTransfer(transferId, {
       status: 'COMPLETED',
       resolvedAt: new Date(),
-      newAllocationId: newAllocation.id,
     });
 
     eventBus.emit(EVENTS.TRANSFER_APPROVED, {
@@ -260,7 +257,7 @@ export async function approveTransfer(
       assetId: oldAllocation.assetId,
       approvedById,
       targetUserId: transfer.targetUserId ?? null,
-      targetDeptId: transfer.targetDepartmentId ?? null,
+      targetDeptId: transfer.targetDeptId ?? null,
     });
 
     return completed;
@@ -270,7 +267,6 @@ export async function approveTransfer(
   const rejected = await allocationRepo.updateTransfer(transferId, {
     status: 'REJECTED',
     approvedBy: { connect: { id: approvedById } },
-    approvedAt: new Date(),
     resolvedAt: new Date(),
     notes: notes ?? null,
   });

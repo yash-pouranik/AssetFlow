@@ -1,4 +1,4 @@
-﻿import { z } from 'zod';
+import { z } from 'zod';
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
@@ -9,7 +9,6 @@ export const AssetStatusEnum = z.enum([
   'UNDER_MAINTENANCE',
   'RETIRED',
   'LOST',
-  'STOLEN',
   'DISPOSED',
 ]);
 

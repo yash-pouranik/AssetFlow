@@ -55,7 +55,7 @@ export async function findAllocationById(id: string) {
       user: { select: { id: true, name: true, email: true, role: true } },
       department: { select: { id: true, name: true } },
       transfers: {
-        orderBy: { requestedAt: 'desc' },
+        orderBy: { createdAt: 'desc' },
         include: {
           requestedBy: { select: { id: true, name: true, email: true } },
           approvedBy: { select: { id: true, name: true, email: true } },
@@ -186,7 +186,7 @@ export async function findAllTransfers(
       where,
       skip,
       take: limit,
-      orderBy: { requestedAt: 'desc' },
+      orderBy: { createdAt: 'desc' },
       include: {
         allocation: {
           include: {

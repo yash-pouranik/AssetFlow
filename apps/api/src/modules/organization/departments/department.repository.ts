@@ -130,7 +130,7 @@ export const departmentRepository = {
 
   async findByName(name: string) {
     return prisma.department.findFirst({
-      where: { name: { equals: name, mode: 'insensitive' } },
+      where: { name: { equals: name } },
     });
   },
 

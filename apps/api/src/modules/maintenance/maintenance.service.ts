@@ -56,7 +56,7 @@ export const maintenanceService = {
 
     // 4. Find an ASSET_MANAGER to notify
     const manager = await prisma.user.findFirst({
-      where: { role: Role.ASSET_MANAGER, isActive: true },
+      where: { role: Role.ASSET_MANAGER, status: 'ACTIVE' },
       select: { id: true, name: true, email: true },
     });
 
@@ -150,10 +150,10 @@ export const maintenanceService = {
     // Verify technician exists
     const technician = await prisma.user.findUnique({
       where: { id: data.technicianId },
-      select: { id: true, name: true, role: true, isActive: true },
+      select: { id: true, name: true, role: true, status: true },
     });
 
-    if (!technician || !technician.isActive) {
+    if (!technician || technician.status !== 'ACTIVE') {
       throw new NotFoundError(`Technician with ID "${data.technicianId}" not found or inactive`);
     }
 

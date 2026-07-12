@@ -39,7 +39,7 @@ export class NotificationService {
   ) {
     try {
       await prisma.notification.create({
-        data: { userId, type: type as any, title, message, meta },
+        data: { userId, type: type as any, title, message, meta: meta as any },
       });
     } catch (err) {
       logger.error('[NotificationService] Failed to create notification', { err });
@@ -55,7 +55,7 @@ export class NotificationService {
   ) {
     try {
       await prisma.activityLog.create({
-        data: { actorId, action, entityType, entityId, meta },
+        data: { actorId, action, entityType, entityId, meta: meta as any },
       });
     } catch (err) {
       logger.error('[NotificationService] Failed to create activity log', { err });

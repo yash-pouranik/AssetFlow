@@ -26,7 +26,7 @@ export const categoryRepository = {
 
   async findByName(name: string) {
     return prisma.assetCategory.findFirst({
-      where: { name: { equals: name, mode: 'insensitive' } },
+      where: { name: { equals: name } },
     });
   },
 
@@ -35,7 +35,7 @@ export const categoryRepository = {
       data: {
         name: data.name,
         description: data.description ?? null,
-        extraFields: data.extraFields ?? undefined,
+        extraFields: (data.extraFields as any) ?? undefined,
       },
     });
   },
@@ -46,7 +46,7 @@ export const categoryRepository = {
       data: {
         ...(data.name !== undefined && { name: data.name }),
         ...(data.description !== undefined && { description: data.description }),
-        ...(data.extraFields !== undefined && { extraFields: data.extraFields ?? undefined }),
+        ...(data.extraFields !== undefined && { extraFields: (data.extraFields as any) ?? undefined }),
       },
     });
   },

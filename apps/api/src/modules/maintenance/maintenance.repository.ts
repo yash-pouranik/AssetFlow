@@ -39,7 +39,7 @@ export type MaintenanceFilters = {
 export const maintenanceRepository = {
   /** Find a single maintenance request with full nested details. */
   async findById(id: string) {
-    return prisma.maintenanceRequest.findUnique({
+    return prisma.maintenanceReq.findUnique({
       where: { id },
       include: {
         asset: { select: assetSelect },
@@ -56,7 +56,7 @@ export const maintenanceRepository = {
     page: number = 1,
     limit: number = 20,
   ) {
-    const where: Prisma.MaintenanceRequestWhereInput = {};
+    const where: Prisma.MaintenanceReqWhereInput = {};
 
     if (filters.assetId) where.assetId = filters.assetId;
     if (filters.status) where.status = filters.status;
@@ -65,7 +65,7 @@ export const maintenanceRepository = {
     const skip = (page - 1) * limit;
 
     const [items, total] = await Promise.all([
-      prisma.maintenanceRequest.findMany({
+      prisma.maintenanceReq.findMany({
         where,
         skip,
         take: limit,
@@ -76,20 +76,20 @@ export const maintenanceRepository = {
           technician: { select: technicianSelect },
         },
       }),
-      prisma.maintenanceRequest.count({ where }),
+      prisma.maintenanceReq.count({ where }),
     ]);
 
     return { items, total, page, limit };
   },
 
   /** Create a new maintenance request. */
-  async create(data: Prisma.MaintenanceRequestCreateInput) {
-    return prisma.maintenanceRequest.create({ data });
+  async create(data: Prisma.MaintenanceReqCreateInput) {
+    return prisma.maintenanceReq.create({ data });
   },
 
   /** Update maintenance request fields by ID. */
-  async update(id: string, data: Prisma.MaintenanceRequestUpdateInput) {
-    return prisma.maintenanceRequest.update({
+  async update(id: string, data: Prisma.MaintenanceReqUpdateInput) {
+    return prisma.maintenanceReq.update({
       where: { id },
       data,
       include: {
@@ -106,7 +106,7 @@ export const maintenanceRepository = {
    * Used to prevent duplicate requests.
    */
   async findActiveForAsset(assetId: string) {
-    return prisma.maintenanceRequest.findFirst({
+    return prisma.maintenanceReq.findFirst({
       where: {
         assetId,
         status: {

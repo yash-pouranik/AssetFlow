@@ -165,7 +165,6 @@ export const AssetRepository = {
       UNDER_MAINTENANCE: 0,
       RETIRED: 0,
       LOST: 0,
-      STOLEN: 0,
       DISPOSED: 0,
     };
 
@@ -177,13 +176,13 @@ export const AssetRepository = {
   },
 
   /**
-   * Check whether an asset has at least one active (APPROVED / PENDING) allocation.
+   * Check whether an asset has at least one active (ACTIVE / OVERDUE) allocation.
    */
   async hasActiveAllocation(assetId: string): Promise<boolean> {
     const count = await prisma.allocation.count({
       where: {
         assetId,
-        status: { in: ['APPROVED', 'PENDING'] },
+        status: { in: ['ACTIVE', 'OVERDUE'] },
       },
     });
     return count > 0;

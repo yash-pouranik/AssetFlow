@@ -67,7 +67,7 @@ export const employeeRepository = {
               select: {
                 id: true,
                 name: true,
-                assetTag: true,
+                tag: true,
                 status: true,
               },
             },

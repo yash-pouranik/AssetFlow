@@ -67,7 +67,7 @@ export const bookingController = {
         req.params.id,
         req.body,
         userId,
-        userRole,
+        userRole as any,
       );
       res.json({ success: true, data: booking });
     } catch (err) {
@@ -83,7 +83,7 @@ export const bookingController = {
       const booking = await bookingService.cancelBooking(
         req.params.id,
         userId,
-        userRole,
+        userRole as any,
       );
       res.json({ success: true, data: booking });
     } catch (err) {

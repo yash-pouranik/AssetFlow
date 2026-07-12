@@ -139,6 +139,7 @@ model Department {
   assets      Asset[]
   allocations Allocation[]
   auditCycles AuditCycle[]
+  transfersTargeted Transfer[] @relation("TransferTargetDept")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -187,6 +188,7 @@ model User {
   assignedMaintenances MaintenanceReq[] @relation("TechnicianOf")
   transfersRequested   Transfer[]       @relation("TransferRequester")
   transfersApproved    Transfer[]       @relation("TransferApprover")
+  transfersTargeted    Transfer[]       @relation("TransferTargetUser")
   bookings             Booking[]
   notifications        Notification[]
   activityLogs         ActivityLog[]
@@ -279,7 +281,9 @@ model Transfer {
 
   // Target — transfer to this user/dept
   targetUserId String?
+  targetUser   User?       @relation("TransferTargetUser", fields: [targetUserId], references: [id])
   targetDeptId String?
+  targetDepartment Department? @relation("TransferTargetDept", fields: [targetDeptId], references: [id])
 
   // Who raised and who approved
   requestedById String

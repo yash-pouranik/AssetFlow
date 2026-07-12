@@ -217,7 +217,6 @@ export async function closeAuditCycle(cycleId: string, closedById: string) {
       data: {
         status: 'CLOSED',
         closedAt: now,
-        closedById,
       },
     });
   });

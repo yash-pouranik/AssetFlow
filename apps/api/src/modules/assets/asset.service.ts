@@ -177,7 +177,6 @@ export const AssetService = {
       throw new AppError(
         `Asset is already in "${payload.status}" status`,
         400,
-        'SAME_STATUS',
       );
     }
 

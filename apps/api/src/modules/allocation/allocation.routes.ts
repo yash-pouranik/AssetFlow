@@ -30,7 +30,7 @@ router.use(authenticate);
  * List all allocations (department head and above).
  */
 router.get(
-  '/',
+  '/allocations',
   deptHeadOrAbove,
   allocationController.getAll,
 );
@@ -40,7 +40,7 @@ router.get(
  * Create a new allocation (manager or admin only).
  */
 router.post(
-  '/',
+  '/allocations',
   managerOrAdmin,
   validate(CreateAllocationDto),
   allocationController.allocate,
@@ -99,7 +99,7 @@ router.patch(
  * Retrieve a single allocation by ID (department head and above).
  */
 router.get(
-  '/:id',
+  '/allocations/:id',
   deptHeadOrAbove,
   allocationController.getById,
 );
@@ -109,7 +109,7 @@ router.get(
  * Return an allocated asset (department head and above).
  */
 router.post(
-  '/:id/return',
+  '/allocations/:id/return',
   deptHeadOrAbove,
   validate(ReturnAssetDto),
   allocationController.returnAsset,

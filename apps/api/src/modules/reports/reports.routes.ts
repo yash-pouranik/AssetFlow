@@ -76,7 +76,7 @@ router.get('/asset-utilization', authenticate, managerOrAdmin, async (req: Reque
     const assets = await prisma.asset.findMany({
       select: {
         id: true,
-        assetTag: true,
+        tag: true,
         name: true,
         category: { select: { name: true } },
         condition: true,
@@ -88,7 +88,7 @@ router.get('/asset-utilization', authenticate, managerOrAdmin, async (req: Reque
       const info = allocationMap.get(asset.id);
       return {
         assetId: asset.id,
-        assetTag: asset.assetTag,
+        assetTag: asset.tag,
         name: asset.name,
         category: asset.category?.name ?? 'Uncategorised',
         condition: asset.condition,
@@ -116,13 +116,13 @@ router.get('/asset-utilization', authenticate, managerOrAdmin, async (req: Reque
 // ─── 2. GET /reports/maintenance-frequency ─────────────────────────────────────
 router.get('/maintenance-frequency', authenticate, managerOrAdmin, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const requests = await prisma.maintenanceRequest.findMany({
+    const requests = await prisma.maintenanceReq.findMany({
       select: {
         assetId: true,
         status: true,
         asset: {
           select: {
-            assetTag: true,
+            tag: true,
             name: true,
             category: { select: { name: true } },
           },
@@ -148,7 +148,7 @@ router.get('/maintenance-frequency', authenticate, managerOrAdmin, async (req: R
       if (!assetMap.has(req_.assetId)) {
         assetMap.set(req_.assetId, {
           assetId: req_.assetId,
-          assetTag: req_.asset.assetTag,
+          assetTag: req_.asset.tag,
           assetName: req_.asset.name,
           category: req_.asset.category?.name ?? 'Uncategorised',
           totalRequests: 0,
@@ -158,7 +158,7 @@ router.get('/maintenance-frequency', authenticate, managerOrAdmin, async (req: R
       }
       const entry = assetMap.get(req_.assetId)!;
       entry.totalRequests += 1;
-      if (req_.status === 'RESOLVED' || req_.status === 'COMPLETED') {
+      if (req_.status === 'RESOLVED') {
         entry.resolvedCount += 1;
       } else {
         entry.pendingCount += 1;
@@ -286,27 +286,27 @@ router.get('/upcoming-maintenance', authenticate, managerOrAdmin, async (req: Re
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
     // Get date of last resolved/completed maintenance per asset
-    const lastMaintenance = await prisma.maintenanceRequest.groupBy({
+    const lastMaintenance = await prisma.maintenanceReq.groupBy({
       by: ['assetId'],
       where: {
-        status: { in: ['RESOLVED', 'COMPLETED'] },
+        status: { in: ['RESOLVED'] }, // schema.prisma has RESOLVED but not COMPLETED
       },
       _max: { resolvedAt: true },
     });
 
     const lastMaintenanceMap = new Map(
-      lastMaintenance.map((m) => [m.assetId, m._max.resolvedAt]),
+      lastMaintenance.map((m: any) => [m.assetId, m._max.resolvedAt]),
     );
 
     // Fetch assets in at-risk conditions
     const atRiskAssets = await prisma.asset.findMany({
       where: {
         condition: { in: ['FAIR', 'POOR', 'DAMAGED'] },
-        status: { not: 'DECOMMISSIONED' },
+        status: { not: 'RETIRED' },
       },
       select: {
         id: true,
-        assetTag: true,
+        tag: true,
         name: true,
         condition: true,
         category: { select: { name: true } },
@@ -315,11 +315,11 @@ router.get('/upcoming-maintenance', authenticate, managerOrAdmin, async (req: Re
 
     const rows = atRiskAssets
       .map((asset) => {
-        const lastMaint = lastMaintenanceMap.get(asset.id) ?? null;
+        const lastMaint = lastMaintenanceMap.get(asset.id) as Date | null ?? null;
         const isOverdue = lastMaint === null || lastMaint < sixMonthsAgo;
         return {
           assetId: asset.id,
-          assetTag: asset.assetTag,
+          assetTag: asset.tag,
           name: asset.name,
           category: asset.category?.name ?? 'Uncategorised',
           condition: asset.condition,
@@ -361,7 +361,7 @@ router.get('/overdue-returns', authenticate, managerOrAdmin, async (req: Request
         asset: {
           select: {
             id: true,
-            assetTag: true,
+            tag: true,
             name: true,
             category: { select: { name: true } },
             condition: true,
@@ -386,14 +386,14 @@ router.get('/overdue-returns', authenticate, managerOrAdmin, async (req: Request
       return {
         allocationId: alloc.id,
         assetId: alloc.asset.id,
-        assetTag: alloc.asset.assetTag,
+        assetTag: alloc.asset.tag,
         assetName: alloc.asset.name,
         category: alloc.asset.category?.name ?? 'Uncategorised',
         condition: alloc.asset.condition,
-        userId: alloc.user.id,
-        userName: alloc.user.name,
-        userEmail: alloc.user.email,
-        department: alloc.user.department?.name ?? 'N/A',
+        userId: alloc.user?.id || '',
+        userName: alloc.user?.name || 'N/A',
+        userEmail: alloc.user?.email || '',
+        department: alloc.user?.department?.name ?? 'N/A',
         allocatedAt: alloc.allocatedAt,
         expectedReturn: alloc.expectedReturn,
         daysOverdue,

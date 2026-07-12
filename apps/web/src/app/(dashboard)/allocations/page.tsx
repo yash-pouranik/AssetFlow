@@ -240,7 +240,7 @@ export default function AllocationsPage() {
     setIsTransferOpen(true);
   };
 
-  const isManagerOrAdmin = user?.role === 'ADMIN' || user?.role === 'ASSET_MANAGER' || user?.role === 'MANAGER';
+  const isManagerOrAdmin = user?.role === 'ADMIN' || user?.role === 'ASSET_MANAGER';
 
   const getStatusBadge = (status: string) => {
     switch (status.toUpperCase()) {

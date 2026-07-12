@@ -42,14 +42,7 @@ export const bookingService = {
       const conflict = overlapping[0];
       throw new ConflictError(
         `Asset is already booked from ${conflict.startTime.toISOString()} ` +
-          `to ${conflict.endTime.toISOString()}`,
-        {
-          conflictingBookingId: conflict.id,
-          conflictingSlot: {
-            startTime: conflict.startTime,
-            endTime: conflict.endTime,
-          },
-        },
+          `to ${conflict.endTime.toISOString()}`
       );
     }
 
@@ -212,14 +205,7 @@ export const bookingService = {
         const conflict = overlapping[0];
         throw new ConflictError(
           `Asset is already booked from ${conflict.startTime.toISOString()} ` +
-            `to ${conflict.endTime.toISOString()}`,
-          {
-            conflictingBookingId: conflict.id,
-            conflictingSlot: {
-              startTime: conflict.startTime,
-              endTime: conflict.endTime,
-            },
-          },
+            `to ${conflict.endTime.toISOString()}`
         );
       }
     }
