@@ -1,6 +1,6 @@
 # AssetFlow — Enterprise Asset & Resource Management System
 
-![AssetFlow Banner](docs/banner.png)
+![AssetFlow Banner](docs/banner-bw.png)
 
 ![AssetFlow](https://img.shields.io/badge/AssetFlow-ERP-4f46e5?style=for-the-badge)
 
