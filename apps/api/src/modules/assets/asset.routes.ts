@@ -1,4 +1,4 @@
-﻿import { Router } from 'express';
+import { Router } from 'express';
 import { authenticate } from '../../shared/middleware/auth.middleware';
 import {
   authorize,
@@ -30,7 +30,7 @@ router.use(authenticate);
  */
 router.get(
   '/',
-  authorize(allRoles),
+  allRoles,
   validate(AssetSearchDto, 'query'),
   AssetController.getAll,
 );
@@ -42,7 +42,7 @@ router.get(
  */
 router.post(
   '/',
-  authorize(managerOrAdmin),
+  managerOrAdmin,
   upload.single('photo'),
   validate(CreateAssetDto),
   AssetController.register,
@@ -55,7 +55,7 @@ router.post(
  * Returns per-status asset counts for the dashboard KPI section.
  * Accessible to all authenticated roles.
  */
-router.get('/stats', authorize(allRoles), AssetController.getStats);
+router.get('/stats', allRoles, AssetController.getStats);
 
 // ── Single-resource routes ────────────────────────────────────────────────────
 
@@ -64,7 +64,7 @@ router.get('/stats', authorize(allRoles), AssetController.getStats);
  * Returns full asset detail including recent allocations and maintenances.
  * Accessible to all authenticated roles.
  */
-router.get('/:id', authorize(allRoles), AssetController.getById);
+router.get('/:id', allRoles, AssetController.getById);
 
 /**
  * PUT /assets/:id
@@ -73,7 +73,7 @@ router.get('/:id', authorize(allRoles), AssetController.getById);
  */
 router.put(
   '/:id',
-  authorize(managerOrAdmin),
+  managerOrAdmin,
   upload.single('photo'),
   validate(UpdateAssetDto),
   AssetController.update,
@@ -86,7 +86,7 @@ router.put(
  */
 router.patch(
   '/:id/status',
-  authorize(managerOrAdmin),
+  managerOrAdmin,
   validate(AssetStatusPatchDto),
   AssetController.patchStatus,
 );
@@ -96,6 +96,6 @@ router.patch(
  * Permanently remove an asset. Blocked when an active allocation exists.
  * Restricted to admins only.
  */
-router.delete('/:id', authorize(adminOnly), AssetController.remove);
+router.delete('/:id', adminOnly, AssetController.remove);
 
 export default router;

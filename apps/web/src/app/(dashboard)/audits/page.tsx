@@ -51,7 +51,7 @@ export default function AuditsPage() {
   const { data: audits = [], isLoading, error } = useQuery<Audit[]>({
     queryKey: ['audits'],
     queryFn: async () => {
-      const response = await api.get('/audits');
+      const response = await api.get('/audit-cycles');
       return response.data?.data || response.data || [];
     },
   });

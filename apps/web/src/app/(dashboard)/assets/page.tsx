@@ -49,8 +49,12 @@ export default function AssetsPage() {
       try {
         const response = await api.get("/assets");
         if (response.data.success) {
-          setAssets(response.data.data.data);
-          setMeta(response.data.data.meta);
+          setAssets(response.data.data || []);
+          setMeta({
+            total: response.data.total || 0,
+            page: response.data.page || 1,
+            limit: response.data.limit || 20,
+          });
         }
       } catch (error) {
         console.error("Failed to fetch assets:", error);

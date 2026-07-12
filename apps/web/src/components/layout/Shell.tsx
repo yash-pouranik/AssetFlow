@@ -112,7 +112,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2 focus:outline-none">
+                <div role="button" tabIndex={0} className="flex items-center gap-2 focus:outline-none cursor-pointer">
                   <div className="text-right hidden sm:block">
                     <p className="text-sm font-medium text-gray-900 dark:text-white leading-none">{user.name}</p>
                     <p className="text-xs text-gray-500 mt-1">{user.role}</p>
@@ -122,7 +122,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
                       {user.name.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                </button>
+                </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
