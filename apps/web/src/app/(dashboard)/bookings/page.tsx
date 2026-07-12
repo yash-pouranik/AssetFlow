@@ -89,8 +89,7 @@ export default function BookingsPage() {
     queryKey: ['bookings'],
     queryFn: async () => {
       const res = await api.get('/bookings');
-      // Assuming response structure is { success: true, data: [...] } or just [...]
-      return Array.isArray(res.data) ? res.data : (res.data?.data || []);
+      return Array.isArray(res.data) ? res.data : (res.data?.items || res.data?.data || []);
     },
   });
 
