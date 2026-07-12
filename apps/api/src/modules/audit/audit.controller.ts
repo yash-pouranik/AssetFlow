@@ -54,6 +54,11 @@ export async function getAllCycles(
     const filterResult = AuditFilterDtoSchema.safeParse(req.query);
     const filters = filterResult.success ? filterResult.data : {};
 
+    // Role-based scoping for regular employees
+    if (req.user!.role === 'EMPLOYEE') {
+      filters.auditorId = req.user!.id;
+    }
+
     const result = await AuditService.getAllCycles(filters, page, limit);
 
     res.status(200).json({

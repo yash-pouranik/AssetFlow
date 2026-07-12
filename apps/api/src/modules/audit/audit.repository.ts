@@ -75,6 +75,12 @@ export async function findAllCycles(
     where.departmentId = filters.departmentId;
   }
 
+  if (filters.auditorId) {
+    where.items = {
+      some: { auditorId: filters.auditorId },
+    };
+  }
+
   const skip = (page - 1) * limit;
 
   const [data, total] = await Promise.all([

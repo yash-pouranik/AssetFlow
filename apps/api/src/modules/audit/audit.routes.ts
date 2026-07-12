@@ -25,7 +25,7 @@ router.use(authenticate);
  * List all audit cycles (paginated, filterable).
  * Access: MANAGER, ADMIN
  */
-router.get('/', managerOrAdmin, AuditController.getAllCycles);
+router.get('/', allRoles, AuditController.getAllCycles);
 
 /**
  * POST /audit-cycles

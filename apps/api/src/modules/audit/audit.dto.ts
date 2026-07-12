@@ -69,6 +69,7 @@ export type UpdateAuditItemDto = z.infer<typeof UpdateAuditItemDtoSchema>;
 export const AuditFilterDtoSchema = z.object({
   status: z.enum(['OPEN', 'CLOSED']).optional(),
   departmentId: z.string().uuid('Invalid department ID').optional(),
+  auditorId: z.string().uuid('Invalid auditor ID').optional(),
 });
 
 export type AuditFilterDto = z.infer<typeof AuditFilterDtoSchema>;
