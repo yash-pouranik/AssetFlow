@@ -1,0 +1,16 @@
+{
+  "name": "assetflow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Enterprise Asset & Resource Management System",
+  "scripts": {
+    "dev": "pnpm --parallel dev",
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm --recursive build",
+    "lint": "pnpm --recursive lint"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
