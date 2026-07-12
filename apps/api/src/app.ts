@@ -98,6 +98,7 @@ app.get('/api/health', (_req, res) => {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     version: '1.0.0',
+    uptime: `${Math.floor(process.uptime())}s`,
   });
 });
 
