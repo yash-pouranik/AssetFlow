@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/*
+ * Custom variant compilation for Tailwind CSS v4.
+ * Maps dark theme selectors via next-themes client class toggles.
+ */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
