@@ -249,37 +249,11 @@ export default function AssetDetailPage() {
         {/* Financial & Additional Details Card */}
         <Card className="md:col-span-2 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-lg">Acquisition Details & Notes</CardTitle>
+            <CardTitle className="text-lg">Administrative Notes</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-3 border rounded-lg bg-card/50 flex items-center gap-3">
-                <div className="p-2 bg-primary/10 text-primary rounded-md">
-                  <Calendar className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Acquisition Date</p>
-                  <p className="text-sm font-semibold">
-                    {asset.acquisitionDate ? format(new Date(asset.acquisitionDate), 'PPP') : "N/A"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-3 border rounded-lg bg-card/50 flex items-center gap-3">
-                <div className="p-2 bg-primary/10 text-primary rounded-md">
-                  <DollarSign className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Acquisition Cost</p>
-                  <p className="text-sm font-semibold">
-                    {asset.acquisitionCost ? `$${Number(asset.acquisitionCost).toLocaleString()}` : "N/A"}
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <div>
-              <Label className="text-xs text-muted-foreground">Administrative Notes</Label>
+              <Label className="text-xs text-muted-foreground">Notes</Label>
               <div className="mt-1.5 p-3 border rounded-lg bg-muted/30 min-h-[100px]">
                 <p className="text-sm text-foreground whitespace-pre-line">
                   {asset.notes || "No administrative notes provided for this asset."}
