@@ -63,15 +63,20 @@ export default function OrganizationPage() {
     },
   });
 
-  const { data: employees = [], isLoading: isLoadingEmployees } = useQuery({
+  const { data: employeesData, isLoading: isLoadingEmployees } = useQuery({
     queryKey: ['employees'],
     queryFn: async () => {
       const res = await api.get('/employees');
-      return Array.isArray(res.data)
-        ? res.data
-        : (Array.isArray(res.data?.data) ? res.data.data : []);
+      return res.data;
     },
   });
+
+  const employees = Array.isArray(employeesData)
+    ? employeesData
+    : Array.isArray(employeesData?.data)
+      ? employeesData.data
+      : [];
+
 
   // Department Dialog State
   const [isDeptDialogOpen, setIsDeptDialogOpen] = useState(false);
