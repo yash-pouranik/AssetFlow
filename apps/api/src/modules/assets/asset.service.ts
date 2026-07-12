@@ -1,4 +1,4 @@
-﻿import { AssetStatus } from '@prisma/client';
+import { AssetStatus } from '@prisma/client';
 import { prisma } from '../../shared/prisma/client';
 import { AppError, NotFoundError, ConflictError } from '../../shared/errors/AppError';
 import { eventBus, EVENTS } from '../../shared/events/eventBus';
@@ -54,7 +54,7 @@ export const AssetService = {
    */
   async register(data: CreateAssetDto, photoPath?: string) {
     // 1. Validate category exists
-    const category = await prisma.category.findUnique({ where: { id: data.categoryId } });
+    const category = await prisma.assetCategory.findUnique({ where: { id: data.categoryId } });
     if (!category) {
       throw new NotFoundError(`Category with ID "${data.categoryId}" was not found`);
     }
@@ -116,7 +116,7 @@ export const AssetService = {
 
     // Validate new categoryId if provided
     if (data.categoryId) {
-      const category = await prisma.category.findUnique({ where: { id: data.categoryId } });
+      const category = await prisma.assetCategory.findUnique({ where: { id: data.categoryId } });
       if (!category) {
         throw new NotFoundError(`Category with ID "${data.categoryId}" was not found`);
       }
