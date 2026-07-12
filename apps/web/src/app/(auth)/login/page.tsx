@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuthStore } from '@/store/auth';
+import Link from 'next/link';
 import api from '@/lib/api';
 import {
   Card,
@@ -119,8 +120,16 @@ export default function LoginPage() {
               </Button>
             </form>
           </CardContent>
-          <CardFooter className="text-sm text-center text-gray-500 justify-center">
-            AssetFlow ERP v1.0
+          <CardFooter className="flex flex-col space-y-2 justify-center text-sm text-center">
+            <div>
+              <span className="text-gray-500">Don't have an account? </span>
+              <Link href="/signup" className="text-primary hover:underline font-medium">
+                Sign up
+              </Link>
+            </div>
+            <div className="text-gray-400 text-xs">
+              AssetFlow ERP v1.0
+            </div>
           </CardFooter>
         </Card>
       </div>
