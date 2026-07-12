@@ -117,7 +117,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/activity-logs', activityLogRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
-app.use('/api', auditRoutes);                   // /api/audit-cycles
+app.use('/api/audit-cycles', auditRoutes);      // /api/audit-cycles
 
 // ─────────────────────────────────────────────
 // 404 Handler
