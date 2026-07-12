@@ -105,10 +105,8 @@ export default function RegisterAssetPage() {
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 max-w-3xl mx-auto w-full">
       <div className="flex items-center space-x-2">
-        <Button variant="ghost" size="icon" asChild className="hover:bg-transparent">
-          <Link href="/assets">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
+        <Button variant="ghost" size="icon" className="hover:bg-transparent" render={<Link href="/assets" />}>
+          <ArrowLeft className="h-5 w-5" />
         </Button>
         <h2 className="text-3xl font-bold tracking-tight">Register Asset</h2>
       </div>
@@ -209,8 +207,8 @@ export default function RegisterAssetPage() {
             </div>
 
             <div className="flex justify-end gap-4 pt-6 border-t">
-              <Button type="button" variant="outline" asChild>
-                <Link href="/assets">Cancel</Link>
+              <Button type="button" variant="outline" render={<Link href="/assets" />}>
+                Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (

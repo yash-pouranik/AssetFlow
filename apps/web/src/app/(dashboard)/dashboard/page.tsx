@@ -15,7 +15,11 @@ const fetchKPIs = async () => {
 
 const fetchAssetStats = async () => {
   const { data } = await api.get('/assets/stats');
-  return data.data;
+  // Transform Record<string, number> into array of { status, _count } for Recharts
+  return Object.entries(data.data || {}).map(([status, count]) => ({
+    status,
+    _count: count,
+  }));
 };
 
 const fetchAssetUtilization = async () => {

@@ -177,10 +177,9 @@ export default function MaintenancePage() {
         <h2 className="text-3xl font-bold tracking-tight">Maintenance Requests</h2>
         <div className="flex items-center space-x-2">
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" /> Raise Request
-              </Button>
+            <DialogTrigger render={<Button className="shadow-sm" />}>
+              <Plus className="mr-2 h-4 w-4" />
+              Schedule Maintenance
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <form onSubmit={handleRaiseRequest}>

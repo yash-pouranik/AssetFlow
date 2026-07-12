@@ -82,11 +82,9 @@ export default function AuditsPage() {
         </div>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="flex items-center gap-2 shadow-sm">
-              <Plus className="h-4 w-4" />
-              New Audit Cycle
-            </Button>
+          <DialogTrigger render={<Button className="shadow-sm" />}>
+            <ClipboardCheck className="mr-2 h-4 w-4" />
+            New Audit
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>

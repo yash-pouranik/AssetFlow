@@ -157,11 +157,9 @@ export default function BookingsPage() {
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="shadow-sm">
-              <Plus className="mr-2 h-4 w-4" />
-              New Booking
-            </Button>
+          <DialogTrigger render={<Button className="shadow-sm" />}>
+            <Plus className="mr-2 h-4 w-4" />
+            New Booking
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
