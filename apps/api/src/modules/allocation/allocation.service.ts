@@ -36,6 +36,19 @@ export async function allocateAsset(
     );
   }
 
+  // 2.5 Conflict check — block if the asset has active or upcoming bookings
+  const activeBookings = await prisma.booking.findFirst({
+    where: {
+      assetId: data.assetId,
+      status: { in: ['UPCOMING', 'ONGOING'] },
+    },
+  });
+  if (activeBookings) {
+    throw new ConflictError(
+      `Asset '${asset.name}' (${asset.tag}) has active or upcoming bookings. It cannot be allocated until the bookings are completed or cancelled.`,
+    );
+  }
+
   // 3. Create the allocation
   const allocation = await allocationRepo.createAllocation({
     asset: { connect: { id: data.assetId } },

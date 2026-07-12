@@ -18,7 +18,7 @@ export const bookingService = {
     // 1. Verify asset
     const asset = await prisma.asset.findUnique({
       where: { id: data.assetId },
-      select: { id: true, name: true, tag: true, isBookable: true },
+      select: { id: true, name: true, tag: true, isBookable: true, status: true },
     });
 
     if (!asset) {
@@ -28,6 +28,12 @@ export const bookingService = {
     if (!asset.isBookable) {
       throw new ConflictError(
         `Asset "${asset.name}" (${asset.tag}) is not available for booking`,
+      );
+    }
+
+    if (asset.status === 'ALLOCATED') {
+      throw new ConflictError(
+        `Asset "${asset.name}" (${asset.tag}) is currently allocated and cannot be booked`,
       );
     }
 

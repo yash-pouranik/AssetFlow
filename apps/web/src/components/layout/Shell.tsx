@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
+import api from '@/lib/api';
 import { 
   Box, 
   LayoutDashboard, 
@@ -67,9 +68,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   const allowedNavItems = navItems.filter(item => item.roles.includes(user.role));
 
-  const handleLogout = () => {
-    logout();
-    router.push('/login');
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (error) {
+      console.error('Logout API error:', error);
+    } finally {
+      logout();
+      router.push('/login');
+    }
   };
 
   return (

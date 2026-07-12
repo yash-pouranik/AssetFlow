@@ -373,11 +373,11 @@ export default function AuditDetailPage() {
                           }
                         }}>
                           {canManageAudits && (
-                            <DialogTrigger asChild>
+                            <DialogTrigger render={
                               <Button variant="ghost" size="sm" className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950/20">
                                 Verify Asset
                               </Button>
-                            </DialogTrigger>
+                            } />
                           )}
                           <DialogContent className="sm:max-w-[425px]">
                             <form onSubmit={handleAuditSubmit} className="space-y-4">

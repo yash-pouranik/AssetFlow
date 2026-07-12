@@ -150,12 +150,12 @@ export default function AuditsPage() {
 
         {canManageAudits && (
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger render={
               <Button className="shadow-sm bg-indigo-600 hover:bg-indigo-700 text-white">
                 <Plus className="mr-2 h-4 w-4" />
                 New Audit Cycle
               </Button>
-            </DialogTrigger>
+            } />
           <DialogContent className="sm:max-w-[450px]">
             <form onSubmit={handleCreateAudit}>
               <DialogHeader>
