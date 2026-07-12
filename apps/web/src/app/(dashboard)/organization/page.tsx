@@ -531,7 +531,11 @@ export default function OrganizationPage() {
                 <Label htmlFor="dept-status">Status</Label>
                 <Select
                   value={deptForm.status}
+<<<<<<< Updated upstream
                   onValueChange={(val) => setDeptForm({ ...deptForm, status: (val || 'ACTIVE') as 'ACTIVE' | 'INACTIVE' })}
+=======
+                  onValueChange={(val) => setDeptForm({ ...deptForm, status: (val || 'ACTIVE') as any })}
+>>>>>>> Stashed changes
                 >
                   <SelectTrigger id="dept-status">
                     <SelectValue placeholder="Select Status" />
@@ -547,7 +551,11 @@ export default function OrganizationPage() {
                 <Label htmlFor="dept-parent">Parent Department</Label>
                 <Select
                   value={deptForm.parentId || 'none'}
+<<<<<<< Updated upstream
                   onValueChange={(val) => setDeptForm({ ...deptForm, parentId: val === 'none' || !val ? '' : val })}
+=======
+                  onValueChange={(val) => setDeptForm({ ...deptForm, parentId: (val === 'none' ? '' : val) || '' })}
+>>>>>>> Stashed changes
                 >
                   <SelectTrigger id="dept-parent">
                     <SelectValue placeholder="None (Top-level)" />
@@ -569,7 +577,11 @@ export default function OrganizationPage() {
                 <Label htmlFor="dept-head">Department Head</Label>
                 <Select
                   value={deptForm.headId || 'none'}
+<<<<<<< Updated upstream
                   onValueChange={(val) => setDeptForm({ ...deptForm, headId: val === 'none' || !val ? '' : val })}
+=======
+                  onValueChange={(val) => setDeptForm({ ...deptForm, headId: (val === 'none' ? '' : val) || '' })}
+>>>>>>> Stashed changes
                 >
                   <SelectTrigger id="dept-head">
                     <SelectValue placeholder="None" />
