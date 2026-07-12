@@ -7,6 +7,11 @@ import { SignupDto, LoginDto, RefreshTokenDto, PromoteRoleDto, ForgotPasswordDto
 
 const router = Router();
 
+// ==========================================
+// Authentication & JWT Session Route Defs
+// Handles validation rules & RBAC middlewares
+// ==========================================
+
 /**
  * @swagger
  * tags:
