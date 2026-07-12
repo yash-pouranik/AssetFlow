@@ -93,7 +93,14 @@ export default function AuditDetailPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
-  const id = params?.id as string;
+  const id = Array.isArray(params?.id) ? params.id[0] : (params?.id as string | undefined);
+  const isValidAuditId = !!id && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
+
+  useEffect(() => {
+    if (id && !isValidAuditId) {
+      router.replace('/audits');
+    }
+  }, [id, isValidAuditId, router]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isAuditDialogOpen, setIsAuditDialogOpen] = useState(false);
@@ -113,7 +120,7 @@ export default function AuditDetailPage() {
       const res = await api.get(`/audit-cycles/${id}`);
       return res.data;
     },
-    enabled: !!id,
+    enabled: isValidAuditId,
   });
 
   const audit = auditData?.data;
@@ -168,6 +175,10 @@ export default function AuditDetailPage() {
       closeCycleMutation.mutate();
     }
   };
+
+  if (id && !isValidAuditId) {
+    return null;
+  }
 
   if (isLoading) {
     return (

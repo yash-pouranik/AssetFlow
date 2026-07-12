@@ -132,10 +132,13 @@ export default function BookingsPage() {
   const { data: assetsData, isLoading: isLoadingAssets } = useQuery({
     queryKey: ['assets'],
     queryFn: async () => {
-      const res = await api.get('/assets');
-      const list = Array.isArray(res.data) 
-        ? res.data 
-        : (res.data?.items || res.data?.data || []);
+      const res = await api.get('/assets', { params: { limit: 200 } });
+      // Backend returns { success, data: [...], total, page, ... }
+      const list = Array.isArray(res.data?.data)
+        ? res.data.data
+        : Array.isArray(res.data)
+          ? res.data
+          : [];
       // Filter for bookable assets
       return list.filter((a: Asset) => a.isBookable);
     },
@@ -253,8 +256,8 @@ export default function BookingsPage() {
     });
   };
 
-  const bookings: Booking[] = bookingsData || [];
-  const assets: Asset[] = assetsData || [];
+  const bookings: Booking[] = Array.isArray(bookingsData) ? bookingsData : (Array.isArray(bookingsData?.data) ? bookingsData.data : []);
+  const assets: Asset[] = Array.isArray(assetsData) ? assetsData : (Array.isArray(assetsData?.data) ? assetsData.data : []);
 
   // Set default asset if not set
   React.useEffect(() => {
