@@ -17,8 +17,11 @@ import {
   LogOut,
   Bell,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -43,6 +46,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -133,6 +137,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
               </Button>
             </Link>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+            >
+              {mounted && (resolvedTheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />)}
+            </Button>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none cursor-pointer outline-none border-none bg-transparent">
