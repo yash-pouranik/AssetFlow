@@ -111,20 +111,20 @@ Follow these instructions to set up the project locally on your machine.
    ```
 
 3. **Configure Environment Variables**
-   * Set up your `apps/api/.env` (Database URL, JWT Secrets, Port)
-   * Set up your `apps/web/.env.local` (Next.js public API URL)
+   * Copy `apps/api/.env.example` to `apps/api/.env` and set `DATABASE_URL`, `JWT_SECRET`, and `JWT_REFRESH_SECRET`
+   * Create `apps/web/.env.local` and set `NEXT_PUBLIC_API_URL=http://localhost:5000/api`
 
 4. **Initialize Database**
    Run the Prisma migrations and seed the database with demo data.
    ```bash
    cd apps/api
-   npx prisma generate
-   npx prisma migrate dev --name init
-   npx prisma db seed
+   pnpm prisma:generate
+   pnpm prisma:migrate
+   pnpm prisma:seed
    ```
 
    > [!TIP]
-   > If you encounter seeding issues, verify MySQL server connection details and run `npx prisma db seed` directly to pre-populate dummy assets and user roles.
+   > Use a fresh MySQL database for demo setup. If you change `DATABASE_URL`, rerun migrations before seeding.
 
 5. **Start the Development Servers**
    Open two terminal tabs/windows:
@@ -162,10 +162,28 @@ AssetFlow employs a strict hierarchy for permissions:
 
 Use these seeded accounts to instantly test out different RBAC capabilities:
 
-* **👑 Admin:** `admin@assetflow.com` (Pass: `Admin@123`)
-* **💼 Asset Manager:** `manager@assetflow.com` (Pass: `Employee@123`)
-* **🏢 Dept Head:** `depthead@assetflow.com` (Pass: `Employee@123`)
-* **👤 Employee:** `raj@assetflow.com` (Pass: `Employee@123`)
+* **👑 Admin**
+   * `admin@assetflow.com` / `Admin@123`
+* **💼 Asset Managers**
+   * `manager@assetflow.com` / `Employee@123`
+   * `opsmanager@assetflow.com` / `Employee@123`
+* **🏢 Department Heads**
+   * `ithead@assetflow.com` / `Employee@123`
+   * `financehead@assetflow.com` / `Employee@123`
+   * `hrhead@assetflow.com` / `Employee@123`
+   * `opshead@assetflow.com` / `Employee@123`
+   * `saleshead@assetflow.com` / `Employee@123`
+* **👤 Employees**
+   * `raj@assetflow.com` / `Employee@123`
+   * `carol@assetflow.com` / `Employee@123`
+   * `imran@assetflow.com` / `Employee@123`
+   * `nisha@assetflow.com` / `Employee@123`
+   * `ashok@assetflow.com` / `Employee@123`
+   * `leela@assetflow.com` / `Employee@123`
+   * `vikram@assetflow.com` / `Employee@123`
+   * `sana@assetflow.com` / `Employee@123`
+   * `pratik@assetflow.com` / `Employee@123`
+   * `ravi@assetflow.com` / `Employee@123`
 
 ---
 
